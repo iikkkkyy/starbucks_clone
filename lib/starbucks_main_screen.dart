@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(StarBucksApp());
+}
+
 class StarBucksApp extends StatefulWidget {
   const StarBucksApp({Key? key}) : super(key: key);
 
@@ -10,9 +14,23 @@ class StarBucksApp extends StatefulWidget {
 class _StarBucksAppState extends State<StarBucksApp> {
   int _selectedIndex = 0;
 
+  ScrollController _scrollController = ScrollController();
+
+  void _scrollListener() {
+    // 여기서 스크롤 위치를 체크하고 일정 위치 이상으로 스크롤되면 해당 위젯을 숨기도록 처리할 수 있습니다.
+    // 예를 들어, 스크롤이 100 픽셀 이상 내려갔을 때 해당 위젯을 숨길 수 있습니다.
+    if (_scrollController.offset > 100) {
+      // setState를 호출하여 UI를 업데이트합니다.
+      setState(() {
+        // 어떤 동작을 수행하거나 UI를 업데이트할 수 있습니다.
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return MaterialApp(
+      home: DefaultTabController(
         length: 1,
         child: Scaffold(
           bottomNavigationBar: ClipRRect(
@@ -80,15 +98,16 @@ class _StarBucksAppState extends State<StarBucksApp> {
             ),
           ),
           body: CustomScrollView(
-            slivers: [
+            cacheExtent: 0,
+            slivers: <Widget>[
               SliverAppBar(
-                expandedHeight: 110.0,
+                expandedHeight: 100.0,
                 floating: false,
-                pinned: true,
+                pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.asset(
                     'assets/starbucks/00_top.jpeg',
-                    width: 60,
+                    width: 80,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -97,90 +116,206 @@ class _StarBucksAppState extends State<StarBucksApp> {
                 delegate: SliverChildListDelegate(
                   [
                     Container(
+                      height: 90,
                       padding: const EdgeInsets.all(8.0),
                       child: DefaultTextStyle(
-                          style: TextStyle(fontWeight: FontWeight.normal),
-                          child: Column(
-                            children: [
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text('13 ★ until Gold Level',
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                        child: Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '13 ★ until Gold Level',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              Row(
-                                children: [
-                                  // Left side: Progress bar
-                                  Expanded(
-                                    child: LinearProgressIndicator(
-                                      value: 12 / 25,
-                                      backgroundColor: Colors.grey[100],
-                                      valueColor:
-                                          const AlwaysStoppedAnimation<Color>(
-                                              Colors.green),
-                                      minHeight: 8,
-                                      borderRadius: BorderRadius.circular(10),
+                            ),
+                            Row(
+                              // mainAxisSize: MainAxisSize.min,
+                              // crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // Left side: Progress bar
+                                Expanded(
+                                  child: LinearProgressIndicator(
+                                    value: 12 / 25,
+                                    backgroundColor: Colors.grey[100],
+                                    valueColor:
+                                    const AlwaysStoppedAnimation<Color>(
+                                      Colors.green,
                                     ),
+                                    minHeight: 12,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  const SizedBox(width: 6),
-                                  // Add some spacing between progress bar and text
-                                  // Right side: Text '12 / 25'
-                                  const Text(
-                                    '12',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 40),
+                                ),
+                                const SizedBox(width: 10),
+                                // Add some spacing between progress bar and text
+                                // Right side: Text '12 / 25'
+                                const Text(
+                                  '12',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 40,
                                   ),
-                                  const Text(
-                                    ' / ',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 30),
+                                ),
+                                const Text(
+                                  ' / ',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 30,
                                   ),
-                                  const Text('25 ★',
-                                      style: TextStyle(
-                                          color: Colors.green, fontSize: 25)),
-                                ],
-                              ),
-                              // Text 'until Gold Level'
-
-                              // Add more widgets as needed
-                            ],
-                          )),
+                                ),
+                                const Text(
+                                  '25 ★',
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
+              // const SizedBox(width: 40,),
               SliverAppBar(
-                floating: false,
+                toolbarHeight: 30,
+                expandedHeight: 0,
+                floating: true,
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                    background: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.mail_outline_sharp),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'What\'s New',
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      const Icon(Icons.discount),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Coupon',
-                            style: TextStyle(color: Colors.black),
-                          )
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.notification_add_outlined),
-                    ],
-                  ),
-                )),
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.mail_outline_sharp),
+                    TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'What\'s New',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    const Icon(Icons.discount),
+                    TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Coupon',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                    const Spacer(),
+                    const Icon(Icons.notification_add_outlined),
+                  ],
+                ),
+
+                // flexibleSpace: FlexibleSpaceBar(
+                //
+                //     background: Padding(
+                //       padding: const EdgeInsets.all(10.0),
+                //       child: Row(
+                //         children: [
+                //           const Icon(Icons.mail_outline_sharp),
+                //           TextButton(
+                //               onPressed: () {},
+                //               child: const Text(
+                //                 'What\'s New',
+                //                 style: TextStyle(color: Colors.black),
+                //               )),
+                //           const Icon(Icons.discount),
+                //           TextButton(
+                //               onPressed: () {},
+                //               child: const Text(
+                //                 'Coupon',
+                //                 style: TextStyle(color: Colors.black),
+                //               )),
+                //           const Spacer(),
+                //           const Icon(Icons.notification_add_outlined),
+                //         ],
+                //       ),
+                //     )),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: [
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/01_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 100,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Image.asset(
+                            'assets/starbucks/02_body.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        // Add more Image widgets as needed
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
