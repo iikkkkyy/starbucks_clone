@@ -151,7 +151,6 @@ class _StarBucksAppState extends State<StarBucksApp> {
                 ),
               ),
               SliverAppBar(
-                expandedHeight: 0.0,
                 floating: false,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
@@ -172,7 +171,10 @@ class _StarBucksAppState extends State<StarBucksApp> {
                           child: const Text(
                             'Coupon',
                             style: TextStyle(color: Colors.black),
-                          )),
+                          )
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.notification_add_outlined),
                     ],
                   ),
                 )),
