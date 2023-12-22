@@ -23,9 +23,7 @@ class _StarBucksAppState extends State<StarBucksApp> {
           style: const TextStyle(fontWeight: FontWeight.bold),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-
             child: BottomNavigationBar(
-
               type: BottomNavigationBarType.fixed,
               onTap: (index) {
                 setState(() {
@@ -44,42 +42,71 @@ class _StarBucksAppState extends State<StarBucksApp> {
                   label: 'Home',
                   icon: Icon(
                     Icons.home_filled,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: 'Pay',
                   icon: Icon(
                     Icons.payment_rounded,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: 'Order',
                   icon: Icon(
                     Icons.coffee,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: 'Shop',
                   icon: Icon(
                     Icons.shopping_bag_outlined,
-                    size: 30,
+                    size: 25,
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: 'Other',
                   icon: Icon(
                     Icons.more_horiz_sharp,
-                    size: 30,
+                    size: 25,
                   ),
-
                 ),
               ],
             ),
           ),
         ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 100.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.asset(
+                'assets/starbucks/00_top.jpeg',
+                width: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: DefaultTextStyle(
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                child: Column(
+                  children: [
+                    // Add your content here
+                    Text('Your Content'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
