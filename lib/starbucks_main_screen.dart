@@ -13,7 +13,7 @@ class StarBucksApp extends StatefulWidget {
 
 class _StarBucksAppState extends State<StarBucksApp> {
   int _selectedIndex = 0;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -107,10 +107,11 @@ class _StarBucksAppState extends State<StarBucksApp> {
 
   Widget buildCustomScrollView() {
     return CustomScrollView(
-      slivers: <Widget>[
+      physics: ClampingScrollPhysics(),
+      slivers: [
         buildSliverAppBar(),
-        buildSliverList(),
-        buildSliverAppBarWithIcons(),
+        // buildSliverList(),
+        // buildSliverAppBarWithIcons(),
         buildSliverListWithImages(),
       ],
     );
@@ -118,105 +119,137 @@ class _StarBucksAppState extends State<StarBucksApp> {
 
   Widget buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 100.0,
+      expandedHeight: 220.0,
+      toolbarHeight: 0,
       floating: false,
-      pinned: false,
+      pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          'assets/starbucks/00_top.jpeg',
-          width: 80,
-          fit: BoxFit.cover,
+        background: Column(
+          children: [
+            Image.asset(
+              'assets/starbucks/00_top.jpeg',
+              alignment: Alignment.topCenter,
+            ),
+            buildSliverList(),
+          ],
         ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: buildAppBarIcons(),
       ),
     );
   }
 
   Widget buildSliverList() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          Container(
-            height: 90,
-            padding: const EdgeInsets.all(8.0),
-            child: DefaultTextStyle(
-              style: TextStyle(fontWeight: FontWeight.normal),
-              child: Column(
-                children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '13 ★ until Gold Level',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: LinearProgressIndicator(
-                          value: 12 / 25,
-                          backgroundColor: Colors.grey[100],
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                            Colors.green,
-                          ),
-                          minHeight: 12,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        '12 / 25 ★',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '13 ★ until Gold Level',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: LinearProgressIndicator(
+                    value: 12 / 25,
+                    backgroundColor: Colors.grey[100],
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.green,
+                    ),
+                    minHeight: 12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const _ProgressText(
+                    value: '12',
+                    style: TextStyle(color: Colors.black, fontSize: 40)),
+                const _ProgressText(
+                    value: ' / ',
+                    style: TextStyle(color: Colors.grey, fontSize: 30)),
+                const _ProgressText(
+                    value: '25 ★',
+                    style: TextStyle(color: Colors.green, fontSize: 25)),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildAppBarIcons() {
+    return Container(
+      height: 30,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //what's new widget
+              _whatsNewWidget(),
+              Container(
+                width: 10,
+              ),
+              //Coupon Widget
+              _couponWidget(),
+              const Spacer(),
+              const Icon(Icons.notification_add_outlined),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget buildSliverAppBarWithIcons() {
-    return SliverAppBar(
-      toolbarHeight: 30,
-      expandedHeight: 0,
-      floating: true,
-      pinned: true,
-      title: buildAppBarIcons(),
+  Widget _whatsNewWidget() {
+    return Row(
+      children: [
+        const Icon(Icons.mail_outline_sharp),
+        Container(
+          width: 5,
+        ),
+        const Text(
+            'What\'s New',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 
-  Widget buildAppBarIcons() {
+  Widget _couponWidget() {
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Icon(Icons.mail_outline_sharp),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'What\'s New',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
         const Icon(Icons.discount),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'Coupon',
-            style: TextStyle(color: Colors.black),
-          ),
+        Container(
+          width: 5,
         ),
-        const Spacer(),
-        const Icon(Icons.notification_add_outlined),
+        const Text(
+            'Coupon',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+
+        ),
       ],
     );
   }
@@ -254,5 +287,20 @@ class _StarBucksAppState extends State<StarBucksApp> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+}
+
+class _ProgressText extends StatelessWidget {
+  final String value;
+  final TextStyle style;
+
+  const _ProgressText({required this.value, required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      value,
+      style: style,
+    );
   }
 }
